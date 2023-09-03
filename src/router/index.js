@@ -72,7 +72,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   // Jika rute memerlukan otentikasi dan pengguna belum login
-  if (requiresAuth && !store.state.isLoggedIn && store.state.role == "") {
+  if (requiresAuth && !store.state.isLoggedIn && store.state.role == null) {
     if (to.name !== "signin") {
       next("/signin"); // Arahkan ke halaman login hanya jika bukan halaman login itu sendiri
     } else {

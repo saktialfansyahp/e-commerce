@@ -16,61 +16,61 @@
         </h2>
       </div>
 
-      <div class="mt-10 space-y-6 sm:mx-auto sm:w-full sm:max-w-sm">
-        <!-- <form class="space-y-6"> -->
-        <div>
-          <label
-            for="email"
-            class="block text-sm font-medium leading-6 text-gray-900"
-            >Email address</label
-          >
-          <div class="mt-2">
-            <input
-              id="email"
-              name="email"
-              type="email"
-              v-model="email"
-              autocomplete="email"
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between">
+      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form @submit.prevent="submitForm" class="space-y-6">
+          <div>
             <label
-              for="password"
+              for="email"
               class="block text-sm font-medium leading-6 text-gray-900"
-              >Password</label
+              >Email address</label
             >
-            <div class="text-sm">
-              <a
-                href="#"
-                class="font-semibold text-indigo-600 hover:text-indigo-500"
-                >Forgot password?</a
-              >
+            <div class="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="text"
+                v-model="username"
+                autocomplete="email"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
             </div>
           </div>
-          <div class="mt-2">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="current-password"
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
 
-        <div>
-          <button
-            @click="login"
-            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Sign in
-          </button>
-        </div>
-        <!-- </form> -->
+          <div>
+            <div class="flex items-center justify-between">
+              <label
+                for="password"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Password</label
+              >
+              <div class="text-sm">
+                <a
+                  href="#"
+                  class="font-semibold text-indigo-600 hover:text-indigo-500"
+                  >Forgot password?</a
+                >
+              </div>
+            </div>
+            <div class="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                v-model="password"
+                autocomplete="current-password"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Sign in
+            </button>
+          </div>
+        </form>
         <p class="mt-10 text-center text-sm text-gray-500">
           Not a member?
           {{ " " }}
@@ -166,25 +166,65 @@ import {
 </script>
 
 <script>
+import axios from "axios";
+// import { getCookie } from "/cookie";
+import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
-      role: "",
-      email: "",
+      username: "",
+      password: "",
       open: false,
+      token: "",
     };
   },
   methods: {
-    login() {
-      if (this.email === "admin" || this.email === "user") {
-        this.$store.commit("setRole", this.email);
-        this.$store.commit("setLoggedIn", true);
-        console.log(this.$store.state.role);
-        this.$router.push("/");
-      } else {
-        // Handle invalid email case
-        this.open = true;
-      }
+    ...mapActions(["login"]),
+    submitForm() {
+      const credentials = {
+        username: this.username,
+        password: this.password,
+      };
+
+      this.login(credentials)
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    // async login() {
+    //   const data = {
+    //     username: this.username,
+    //     password: this.password,
+    //   };
+    //   try {
+    //     const response = await axios.post("http://localhost:8080/login", data);
+    //     localStorage.setItem("token", response.data.token);
+    //     localStorage.setItem("role", response.data.data.Role.name);
+    //     localStorage.setItem("isLoggedIn", true);
+
+    //     this.$router.push("/");
+    //     // location.reload();
+    //   } catch (error) {
+    //     console.error(error);
+    //     this.open = true;
+    //   }
+    // },
+    product() {
+      axios
+        .get("http://localhost:8080/api/admin/product")
+        .then((response) => {
+          // localStorage.setItem("access_token", response.data.access_token);
+          console.log(response.data);
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.log(error);
+          // this.errorMessage = error.response.data.error;
+        });
     },
   },
 };
