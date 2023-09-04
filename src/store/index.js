@@ -9,10 +9,14 @@ const store = new Vuex.Store({
     role: null,
     token: null,
     isLoggedIn: false,
+    openModals: false,
   },
   mutations: {
     setIsDesktop(state, isDesktop) {
       state.isDesktop = isDesktop;
+    },
+    setModals(state, value) {
+      state.openModals = value;
     },
     setLoggedIn(state, newValue) {
       state.isLoggedIn = newValue;
@@ -53,6 +57,7 @@ const store = new Vuex.Store({
             resolve();
           })
           .catch((error) => {
+            commit("setModals", true);
             reject(error);
           });
       });

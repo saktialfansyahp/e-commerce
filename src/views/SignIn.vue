@@ -83,7 +83,7 @@
       </div>
     </div>
     <TransitionRoot as="template" :show="open">
-      <Dialog as="div" class="relative z-10" @close="open = false">
+      <Dialog as="div" class="relative z-10" @close="closeModals">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -139,7 +139,7 @@
                   <button
                     type="button"
                     class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    @click="open = false"
+                    @click="closeModals"
                     ref="cancelButtonRef"
                   >
                     Oke
@@ -175,11 +175,18 @@ export default {
     return {
       username: "",
       password: "",
-      open: false,
       token: "",
     };
   },
+  computed: {
+    open() {
+      return this.$store.state.openModals;
+    },
+  },
   methods: {
+    closeModals() {
+      this.$store.state.openModals = false;
+    },
     ...mapActions(["login"]),
     submitForm() {
       const credentials = {
@@ -192,8 +199,8 @@ export default {
           this.$router.push("/");
         })
         .catch((error) => {
-          console.error(error.response.data.message);
           this.open = true;
+          console.error(error);
         });
     },
     // async login() {
