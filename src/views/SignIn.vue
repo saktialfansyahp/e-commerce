@@ -114,20 +114,17 @@
               <DialogPanel
                 class="fixed transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
               >
-                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div class="bg-white px-4 pb-2 pt-5 sm:p-6 sm:pb-4">
                   <div class="flex sm:flex sm:items-center">
                     <div class="mx-auto text-center sm:mt-0 sm:text-left">
                       <DialogTitle
                         as="h3"
                         class="text-base font-semibold leading-6 text-gray-900"
-                        >Please fill out the form with the required
-                        information</DialogTitle
+                        >{{ message }}</DialogTitle
                       >
                       <div class="mt-2">
                         <p class="text-sm text-gray-500">
-                          Before proceeding, please take a moment to provide the
-                          necessary information in the form below. This
-                          information is crucial for the next steps
+                          {{ messageDesc }}
                         </p>
                       </div>
                     </div>
@@ -138,7 +135,7 @@
                 >
                   <button
                     type="button"
-                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    class="mt-0 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     @click="closeModals"
                     ref="cancelButtonRef"
                   >
@@ -176,6 +173,8 @@ export default {
       username: "",
       password: "",
       token: "",
+      message: "",
+      messageDesc: "",
     };
   },
   computed: {
@@ -189,18 +188,27 @@ export default {
     },
     ...mapActions(["login"]),
     submitForm() {
+      if (!this.username || !this.password) {
+        // Tampilkan pesan kesalahan jika email atau password kosong
+        this.message = "Email and password are required.";
+        this.messageDesc = "Please fill in both fields before proceeding.";
+        this.$store.state.openModals = true;
+        return;
+      }
       const credentials = {
         username: this.username,
         password: this.password,
       };
-
       this.login(credentials)
         .then(() => {
           this.$router.push("/");
         })
         .catch((error) => {
-          this.open = true;
-          console.error(error);
+          // this.open = true;
+          console.log(error.response.data.message);
+          this.message = "Invalid Email or Password.";
+          this.messageDesc =
+            "The email and password combination you entered is incorrect. Please double-check your email and password and try again.";
         });
     },
     // async login() {
