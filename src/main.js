@@ -9,7 +9,7 @@ import "./assets/css/app.css";
 
 // loadFonts();
 
-axios.defaults.baseURL = "https://go-jwt.vercel.app"; // Ganti dengan baseUrl yang sesuai
+axios.defaults.baseURL = "https://go-rest-api.vercel.app"; // Ganti dengan baseUrl yang sesuai
 
 // Set header dari localStorage
 // const token = localStorage.getItem("token"); // Ganti 'token' dengan kunci yang Anda gunakan untuk menyimpan token di localStorage
