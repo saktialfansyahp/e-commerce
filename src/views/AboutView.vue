@@ -126,10 +126,10 @@
               {{ item.Product.product_name }}
             </td>
             <td class="px-6 py-4 capitalize">{{ item.Color.color }}</td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4 capitalize">
               {{ item.Product.Subcategory.Category.category }}
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4 capitalize">
               {{ item.Product.Subcategory.sub_category }}
             </td>
             <td class="px-6 py-4">
