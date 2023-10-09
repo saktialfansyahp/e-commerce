@@ -290,7 +290,7 @@ export default {
       open: false,
     };
   },
-  beforeMount() {
+  created() {
     this.fetchData();
   },
   methods: {
