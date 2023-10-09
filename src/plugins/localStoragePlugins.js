@@ -10,4 +10,9 @@ export default (store) => {
   } else {
     store.commit("setRole", null);
   }
+  if (localStorage.getItem("history")) {
+    store.commit("setHistory", localStorage.getItem("history"));
+  } else {
+    store.commit("setHistory", null);
+  }
 };

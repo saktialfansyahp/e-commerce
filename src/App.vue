@@ -51,7 +51,6 @@
               <li class="inline-flex items-center">
                 <a
                   href="#"
-                  @click="link"
                   class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                 >
                   <svg
@@ -67,6 +66,35 @@
                   </svg>
                   Home
                 </a>
+              </li>
+              <li v-if="history" aria-current="page">
+                <div class="flex items-center">
+                  <svg
+                    class="w-3 h-3 text-gray-400 mx-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 9 4-4-4-4"
+                    />
+                  </svg>
+                  <a
+                    @click="link"
+                    class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white cursor-pointer"
+                  >
+                    {{ history }}
+                    <!-- <span
+                      class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                      >{{ activeRoute }}</span
+                    > -->
+                  </a>
+                </div>
               </li>
               <li v-if="activeRoute != 'Home'" aria-current="page">
                 <div class="flex items-center">
@@ -367,6 +395,9 @@ export default {
   },
   components: {},
   computed: {
+    history() {
+      return this.$store.state.history;
+    },
     isLoggedIn() {
       return this.$store.state.isLoggedIn;
     },
@@ -381,7 +412,14 @@ export default {
     },
     navigation() {
       return this.$router.options.routes
-        .filter((route) => route.name != "/" && route.name != "Sign In")
+        .filter(
+          (route) =>
+            route.name != "/" &&
+            route.name != "Sign In" &&
+            route.name != "Add Product" &&
+            route.name != "Sign Up" &&
+            route.name != "Edit Product"
+        )
         .map((route) => {
           return {
             name: route.name,
@@ -392,6 +430,11 @@ export default {
     },
   },
   methods: {
+    link() {
+      this.$router.push({ name: this.history });
+      this.$store.state.history = null;
+      localStorage.removeItem("history");
+    },
     ...mapMutations(["setIsDesktop"]),
     handleResize() {
       const width = window.innerWidth;

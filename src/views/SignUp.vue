@@ -12,7 +12,7 @@
         <h2
           class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
         >
-          Sign in to your account
+          Sign up to your account
         </h2>
       </div>
 
@@ -20,17 +20,34 @@
         <form @submit.prevent="submitForm" class="space-y-6">
           <div>
             <label
-              for="email"
+              for="name"
               class="block text-sm font-medium leading-6 text-gray-900"
-              >Email address</label
+              >Name</label
             >
             <div class="mt-2">
               <input
-                id="email"
-                name="email"
+                id="name"
+                name="name"
+                type="text"
+                v-model="name"
+                autocomplete="name"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              for="username"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Username</label
+            >
+            <div class="mt-2">
+              <input
+                id="username"
+                name="username"
                 type="text"
                 v-model="username"
-                autocomplete="email"
+                autocomplete="username"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -67,18 +84,18 @@
             <button
               class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Sign in
+              Sign up
             </button>
           </div>
         </form>
         <p class="mt-10 text-center text-sm text-gray-500">
-          Not a member?
+          Member?
           {{ " " }}
-          <router-link to="/signup">
+          <router-link to="/signin">
             <a
               href="#"
               class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-              >Sign Up</a
+              >Sign In</a
             >
           </router-link>
         </p>
@@ -172,6 +189,7 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
+      name: "",
       username: "",
       password: "",
       token: "",
@@ -188,7 +206,7 @@ export default {
     closeModals() {
       this.$store.state.openModals = false;
     },
-    ...mapActions(["login"]),
+    ...mapActions(["register"]),
     submitForm() {
       if (!this.username || !this.password) {
         // Tampilkan pesan kesalahan jika email atau password kosong
@@ -198,19 +216,20 @@ export default {
         return;
       }
       const credentials = {
+        name: this.name,
         username: this.username,
         password: this.password,
+        role_id: 2,
       };
-      this.login(credentials)
+      this.register(credentials)
         .then(() => {
-          this.$router.push("/");
+          this.$router.push("/signin");
         })
         .catch((error) => {
           // this.open = true;
           console.log(error);
-          this.message = "Invalid Email or Password.";
-          this.messageDesc =
-            "The email and password combination you entered is incorrect. Please double-check your email and password and try again.";
+          this.message = "Registration Error.";
+          this.messageDesc = "Please double check your registration.";
         });
     },
     // async login() {

@@ -164,7 +164,11 @@ export default {
       return this.$router.options.routes
         .filter(
           (route) =>
-            route.name != "/" && route.name != "Admin" && route.name != "User"
+            route.name != "/" &&
+            route.name != "Admin" &&
+            route.name != "User" &&
+            route.name != "Edit Product" &&
+            route.name != "Sign Up"
         )
         .map((route) => {
           return {

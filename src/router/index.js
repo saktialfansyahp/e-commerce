@@ -1,9 +1,13 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import SignIn from "../views/SignIn.vue";
+import SignUp from "../views/SignUp.vue";
 import AboutView from "../views/AboutView.vue";
+import AddProductView from "../views/adminpage/AddProductView.vue";
+import EditProductView from "../views/adminpage/EditProductView.vue";
 import ProductView from "../views/ProductView.vue";
 import store from "../store";
+import jwt_decode from "jwt-decode";
 // import AdminView from "../views/AdminView.vue";
 // import UserView from "../views/UserView.vue";
 
@@ -22,10 +26,16 @@ const routes = [
     component: SignIn,
   },
   {
+    path: "/signup",
+    name: "Sign Up",
+    component: SignUp,
+  },
+  {
     path: "/home",
     name: "Home",
     component: HomeView,
     meta: {
+      breadcrumb: "Home",
       requiresAuth: true,
     },
   },
@@ -34,13 +44,27 @@ const routes = [
     name: "About",
     component: AboutView,
     meta: {
+      breadcrumb: "About",
       requiresAuth: true,
     },
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () =>
-    //   import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+  },
+  {
+    path: "/about/addproduct",
+    name: "Add Product",
+    component: AddProductView,
+    meta: {
+      breadcrumb: "Add Product",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/about/editproduct/:id",
+    name: "Edit Product",
+    component: EditProductView,
+    meta: {
+      breadcrumb: "Edit Product",
+      requiresAuth: true,
+    },
   },
   {
     path: "/product",
@@ -68,18 +92,35 @@ const router = createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
   routes,
 });
+
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
+  const requiresUser = to.matched.some((record) => record.meta.requiresUser);
 
-  // Jika rute memerlukan otentikasi dan pengguna belum login
   if (requiresAuth && !store.state.isLoggedIn && store.state.role == null) {
     if (to.name !== "signin") {
-      next("/signin"); // Arahkan ke halaman login hanya jika bukan halaman login itu sendiri
+      next("/signin");
     } else {
-      next(); // Izinkan navigasi jika halaman yang dituju adalah halaman login
+      next();
     }
+  } else if (requiresAdmin && store.state.role === "admin") {
+    next();
+  } else if (requiresUser && store.state.role === "user") {
+    next();
   } else {
-    next(); // Izinkan navigasi untuk kondisi lain
+    next();
+  }
+  const token = localStorage.getItem("token");
+  const decodedToken = jwt_decode(token);
+  const expirationDate = new Date(decodedToken.exp * 1000);
+  if (expirationDate <= new Date()) {
+    // localStorage.removeItem('access_token');
+    // localStorage.removeItem('user');
+    localStorage.clear();
+    this.$router.push("/signin");
+  } else {
+    next();
   }
 });
 // router.beforeEach((to, from, next) => {

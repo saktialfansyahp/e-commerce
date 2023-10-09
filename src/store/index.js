@@ -10,6 +10,7 @@ const store = new Vuex.Store({
     token: null,
     isLoggedIn: false,
     openModals: false,
+    history: null,
   },
   mutations: {
     setIsDesktop(state, isDesktop) {
@@ -27,6 +28,9 @@ const store = new Vuex.Store({
     setToken(state, newToken) {
       state.token = newToken;
     },
+    setHistory(state, value) {
+      state.history = value;
+    },
   },
   actions: {
     updateIsDesktop({ commit }) {
@@ -41,18 +45,40 @@ const store = new Vuex.Store({
       if (localStorage.getItem("role")) {
         context.commit("setRole", localStorage.getItem("role"));
       }
+      if (localStorage.getItem("history")) {
+        context.commit("setHistory", localStorage.getItem("history"));
+      }
     },
     login({ commit }, credentials) {
       return new Promise((resolve, reject) => {
         // Lakukan permintaan HTTP menggunakan Axios
         axios
-          .post("http://localhost:8080/login", credentials)
+          .post("/login", credentials)
           .then((response) => {
+            commit("setToken", response.data.token);
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${this.state.token}`;
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("role", response.data.data.Role.name);
             localStorage.setItem("isLoggedIn", true);
             commit("setLoggedIn", true);
             commit("setRole", response.data.data.Role.name);
+            console.log(response);
+            resolve();
+          })
+          .catch((error) => {
+            commit("setModals", true);
+            reject(error);
+          });
+      });
+    },
+    register({ commit }, credentials) {
+      return new Promise((resolve, reject) => {
+        // Lakukan permintaan HTTP menggunakan Axios
+        axios
+          .post("/register", credentials)
+          .then((response) => {
             console.log(response);
             resolve();
           })
