@@ -362,7 +362,7 @@ const products = [
                   class="mx-auto max-w-2xl px-6 py-1 sm:px-8 sm:py-16 lg:max-w-7xl lg:px-8"
                 >
                   <h2 class="text-2xl font-bold tracking-tight text-gray-900">
-                    Customers also purchased
+                    Customers also purchased.
                   </h2>
 
                   <div
