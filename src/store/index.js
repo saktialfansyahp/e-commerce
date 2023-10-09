@@ -91,7 +91,7 @@ const store = new Vuex.Store({
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         axios
-          .get("http://localhost:8080/logout")
+          .get("/logout")
           .then((response) => {
             commit("setLoggedIn", false);
             commit("setRole", null);
