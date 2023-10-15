@@ -383,7 +383,7 @@ const products = [
                       </div>
                       <div class="mt-4 flex justify-between">
                         <div>
-                          <h3 class="text-sm text-gray-700">
+                          <h3 class="text-sm text-gray-700 capitalize">
                             <a :href="product.href">
                               <span
                                 aria-hidden="true"
@@ -392,7 +392,7 @@ const products = [
                               {{ product.Product.product_name }}
                             </a>
                           </h3>
-                          <p class="mt-1 text-sm text-gray-500">
+                          <p class="mt-1 text-sm text-gray-500 capitalize">
                             {{ product.Color.color }}
                           </p>
                         </div>
