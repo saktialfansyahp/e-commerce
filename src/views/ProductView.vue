@@ -377,8 +377,7 @@ const products = [
                         class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
                       >
                         <img
-                          :src="product.imageSrc"
-                          :alt="product.imageAlt"
+                          :src="product.Product.image"
                           class="h-full w-full object-cover object-center lg:h-full lg:w-full"
                         />
                       </div>
@@ -390,15 +389,19 @@ const products = [
                                 aria-hidden="true"
                                 class="absolute inset-0"
                               />
-                              {{ product.name }}
+                              {{ product.Product.product_name }}
                             </a>
                           </h3>
                           <p class="mt-1 text-sm text-gray-500">
-                            {{ product.color }}
+                            {{ product.Color.color }}
                           </p>
                         </div>
                         <p class="text-sm font-medium text-gray-900">
-                          {{ product.price }}
+                          Rp{{
+                            product.Product.price
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                          }}
                         </p>
                       </div>
                     </div>
@@ -488,48 +491,73 @@ const filters = [
     ],
   },
 ];
-const products = [
-  {
-    id: 1,
-    name: "Basic Tee",
-    href: "#",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 2,
-    name: "Basic Tee",
-    href: "#",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 3,
-    name: "Basic Tee",
-    href: "#",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 4,
-    name: "Basic Tee",
-    href: "#",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  // More products...
-];
+// const products = [
+//   {
+//     id: 1,
+//     name: "Basic Tee",
+//     href: "#",
+//     imageSrc:
+//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: "$35",
+//     color: "Black",
+//   },
+//   {
+//     id: 2,
+//     name: "Basic Tee",
+//     href: "#",
+//     imageSrc:
+//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: "$35",
+//     color: "Black",
+//   },
+//   {
+//     id: 3,
+//     name: "Basic Tee",
+//     href: "#",
+//     imageSrc:
+//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: "$35",
+//     color: "Black",
+//   },
+//   {
+//     id: 4,
+//     name: "Basic Tee",
+//     href: "#",
+//     imageSrc:
+//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: "$35",
+//     color: "Black",
+//   },
+//   // More products...
+// ];
 const mobileFiltersOpen = ref(false);
+</script>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      products: [],
+    };
+  },
+  created() {},
+  methods: {
+    async fetchData() {
+      axios
+        .get("/api/product")
+        .then((response) => {
+          this.products = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+};
 </script>
