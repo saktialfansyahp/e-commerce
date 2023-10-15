@@ -303,7 +303,7 @@ export default {
           const isMatchingName = product.Product.product_name
             .toLowerCase()
             .includes(searchTerm);
-          const isMatchingColor = product.Product.Color.color
+          const isMatchingColor = product.Color.color
             .toLowerCase()
             .includes(searchTerm);
           const isMatchingCategory =
