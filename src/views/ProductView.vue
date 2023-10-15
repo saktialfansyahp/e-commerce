@@ -546,7 +546,9 @@ export default {
       products: [],
     };
   },
-  created() {},
+  created() {
+    this.fetchData;
+  },
   methods: {
     async fetchData() {
       axios
