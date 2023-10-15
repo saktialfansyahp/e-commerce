@@ -550,7 +550,7 @@ export default {
     this.fetchData;
   },
   methods: {
-    async fetchData() {
+    fetchData() {
       axios
         .get("/api/product")
         .then((response) => {
