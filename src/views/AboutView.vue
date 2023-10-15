@@ -289,6 +289,7 @@ export default {
       message: "",
       product_id: "",
       open: false,
+      searchQuery: "",
     };
   },
   created() {
