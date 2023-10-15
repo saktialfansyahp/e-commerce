@@ -555,6 +555,7 @@ export default {
         .get("/api/product")
         .then((response) => {
           this.products = response.data;
+          console.log(this.products);
         })
         .catch((error) => {
           console.log(error);
